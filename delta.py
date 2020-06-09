@@ -1,9 +1,9 @@
-from keras.models import Model
-from keras.layers import Input, Dense, Flatten
-from keras.utils import to_categorical
-from keras.losses import categorical_crossentropy, mean_squared_error
-from keras.regularizers import l2
-import keras.backend as K
+from tensorflow.keras.models import Model
+from tensorflow.keras.layers import Input, Dense, Flatten
+from tensorflow.keras.utils import to_categorical
+from tensorflow.keras.losses import categorical_crossentropy, mean_squared_error
+from tensorflow.keras.regularizers import l2
+import tensorflow.keras.backend as K
 import numpy as np
 import os.path
 
@@ -27,7 +27,7 @@ def compute_channel_weights(extractor, train_data):
     old_batch_size = train_data.batch_size
     train_data.batch_size = 1
 
-    x = Input(shape=(7, 7, extractor.outputs[0].shape[3].value))
+    x = Input(shape=(7, 7, extractor.outputs[0].shape[3]))
     y = Flatten()(x)
     y = Dense(train_data.num_classes, activation="softmax", kernel_regularizer=l2(0.01))(y)
     logit_model = Model(inputs=[x], outputs=[y])

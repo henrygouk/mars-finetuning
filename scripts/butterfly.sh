@@ -13,7 +13,7 @@ do
 
     python3 finetune.py --dataset=/raid/anon/butterfly-200 --network=enb0 --quiet --test
     python3 finetune.py --dataset=/raid/anon/butterfly-200 --network=enb0 --quiet --test --reg-method=delta --delta-cache=dc/enb0-butterfly.npy --reg-extractor=0.0014523650332113945 --reg-classifier=0.3603203950519164
-    python3 finetune.py --dataset=/raid/anon/butterfly-200 --network=enb0 --quiet --test --reg-norm=inf-op --reg-method=constraint --reg-extractor=4.857979308556528 --reg-classifier=8.6679322121532
+    python3 finetune.py --dataset=/raid/anon/butterfly-200 --network=enb0 --quiet --test --reg-norm=inf-op --reg-method=constraint --reg-extractor=7.305705902961368 --reg-classifier=11.602860348173149
     python3 finetune.py --dataset=/raid/anon/butterfly-200 --network=enb0 --quiet --test --reg-norm=inf-op --reg-method=penalty --reg-extractor=8.733621925976164e-05 --reg-classifier=0.0062381684731317244
     python3 finetune.py --dataset=/raid/anon/butterfly-200 --network=enb0 --quiet --test --reg-norm=frob --reg-method=constraint --reg-extractor=4.36355581453845 --reg-classifier=1.7295210923183646
     python3 finetune.py --dataset=/raid/anon/butterfly-200 --network=enb0 --quiet --test --reg-norm=frob --reg-method=penalty --reg-extractor=0.0010198338700776709 --reg-classifier=0.3581989424760648

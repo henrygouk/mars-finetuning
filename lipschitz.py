@@ -1,7 +1,7 @@
-from keras.constraints import Constraint
-from keras.layers import Conv2D, Dense, BatchNormalization
-from keras.models import Model
-import keras.backend as K
+from tensorflow.keras.constraints import Constraint
+from tensorflow.keras.layers import Conv2D, Dense, BatchNormalization, Layer
+from tensorflow.keras.models import Model
+import tensorflow.keras.backend as K
 import tensorflow as tf
 import sys
 
@@ -24,31 +24,24 @@ def remove_constraints(model):
             _update_constraint(param, DummyConstraint())
 
 def add_constraints(model, norm, lambda_dense=float("inf"), lambda_conv=float("inf"), lambda_bn=float("inf"), verbose=False, zeros=None):
-
     if not zeros:
         zeros = [None] * len(model.layers)
-
-    if isinstance(model, Model):
-        layers = model.layers
     else:
-        layers = model
+        zeros = zeros.layers
+
+    layers = model.layers
 
     for layer, zero in zip(model.layers, zeros):
         if isinstance(layer, Conv2D) and lambda_conv != float("inf"):
-            add_conv_constraint(layer, norm, lambda_conv, zero=zero)
+            add_conv_constraint(layer.weights[0], norm, lambda_conv, zero=zero.weights[0])
         elif isinstance(layer, Dense) and lambda_dense != float("inf"):
-            add_dense_constraint(layer, norm, lambda_dense, zero=zero)
+            add_dense_constraint(layer.weights[0], norm, lambda_dense, zero=zero.weights[0])
         elif isinstance(layer, BatchNormalization) and lambda_bn != float("inf"):
-            add_bn_constraint(layer, norm, lambda_bn, zero=zero)
+            add_bn_constraint(layer.gamma, layer.moving_variance, norm, lambda_bn, zero_gamma=zero.gamma, zero_moving_variance=zero.moving_variance)
         elif verbose:
             sys.stderr.write("Warning: no Lipschitz constraint added for layer of type " + type(layer).__name__ + "\n")
 
-def add_dense_constraint(layer, norm, _lambda, zero=None):
-
-    weights = layer.weights[0]
-
-    if zero:
-        zero = zero.weights[0]
+def add_dense_constraint(weights, norm, _lambda, zero=None):
 
     if norm == "inf-op":
         constraint = LInfLipschitzConstraint(_lambda, zero=zero)
@@ -57,13 +50,7 @@ def add_dense_constraint(layer, norm, _lambda, zero=None):
 
     _update_constraint(weights, constraint)
 
-def add_conv_constraint(layer, norm, _lambda, zero=None):
-
-    weights = layer.weights[0]
-
-    if zero:
-        zero = zero.weights[0]
-
+def add_conv_constraint(weights, norm, _lambda, zero=None):
     if norm == "inf-op":
         constraint = LInfLipschitzConstraint(_lambda, zero=zero)
     elif norm == "frob":
@@ -71,14 +58,14 @@ def add_conv_constraint(layer, norm, _lambda, zero=None):
 
     _update_constraint(weights, constraint)
 
-def add_bn_constraint(layer, norm, _lambda, zero=None):
+def add_bn_constraint(gamma, moving_variance, norm, _lambda, zero_gamma=None, zero_moving_variance=None):
 
     if _lambda < 0.0:
         raise Error("Lambda hyperparameters cannot be negative")
 
-    constraint = BatchNormLipschitzConstraint(_lambda, layer.moving_variance, zero=zero)
+    constraint = BatchNormLipschitzConstraint(_lambda, moving_variance, zero_gamma=zero_gamma, zero_moving_variance=zero_moving_variance)
 
-    _update_constraint(layer.gamma, constraint)
+    _update_constraint(gamma, constraint)
 
 class LInfLipschitzConstraint(Constraint):
 
@@ -110,23 +97,24 @@ class LInfLipschitzConstraint(Constraint):
 
 class BatchNormLipschitzConstraint(Constraint):
 
-    def __init__(self, max_k, variance, zero=None):
+    def __init__(self, max_k, variance, zero_gamma=None, zero_moving_variance=None):
         self.max_k = max_k
         self.variance = variance
-        self.zero = zero
+        self.zero_gamma = zero_gamma
+        self.zero_moving_variance = zero_moving_variance
 
     def __call__(self, w):
         diag = w / K.sqrt(self.variance + 1e-6)
 
-        if self.zero is not None:
-            zero_diag = (self.zero.gamma / K.sqrt(self.zero.moving_variance  + 1e-6))
+        if self.zero_gamma is not None:
+            zero_diag = (self.zero_gamma / K.sqrt(self.zero_moving_variance  + 1e-6))
             t = diag - zero_diag
         else:
             t = diag
 
         v = t * (1.0 / K.maximum(1.0, K.abs(t) / self.max_k))
 
-        if self.zero is not None:
+        if self.zero_gamma is not None:
             return (v + zero_diag) * K.sqrt(self.variance + 1e-6)
         else:
             return v * K.sqrt(self.variance + 1e-6)
@@ -161,6 +149,8 @@ def add_penalties(model, norm, lambda_dense=0.0, lambda_conv=0.0, lambda_bn=0.0,
 
     if not zeros:
         zeros = [None] * len(model.layers)
+    else:
+        zeros = zeros.layers
 
     layers = model.layers
 
@@ -203,7 +193,7 @@ def _add_penalty(model, layer, norm, _lambda, zero=None):
         penalty = _create_penalty(_lambda, _frob_norm, zero)
 
     layer.kernel_regularizer = penalty
-    model.add_loss(penalty(layer.weights[0]))
+    model.add_loss(lambda: layer.kernel_regularizer(layer.weights[0]))
 
 def _linf_norm(w):
     axes=0

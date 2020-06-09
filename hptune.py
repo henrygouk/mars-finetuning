@@ -31,8 +31,8 @@ def objective(params):
 space = {}
 
 if args.reg_method == "constraint":
-    space["classifier"] = hp.loguniform("classifier", 0.5, 2.5)
-    space["extractor"] = hp.loguniform("extractor", 0.5, 2.5)
+    space["classifier"] = hp.loguniform("classifier", 0.5, 3.5)
+    space["extractor"] = hp.loguniform("extractor", 0.5, 3.5)
 else:
     space["classifier"] = hp.loguniform("classifier", -10.0, -1.0)
     space["extractor"] = hp.loguniform("extractor", -10.0, -1.0)

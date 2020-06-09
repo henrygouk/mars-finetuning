@@ -6,7 +6,7 @@ for i in 1 2 3 4 5
 do
     python3 finetune.py --dataset=/raid/anon/vgg-aircraft --network=resnet101 --quiet --test
     python3 finetune.py --dataset=/raid/anon/vgg-aircraft --network=resnet101 --quiet --test --reg-method=delta --delta-cache=dc/resnet101-aircraft.npy --reg-extractor=0.03187606634855057 --reg-classifier=0.14765567167862487
-    python3 finetune.py --dataset=/raid/anon/vgg-aircraft --network=resnet101 --quiet --test --reg-norm=inf-op --reg-method=constraint --reg-extractor=10.360496492780777 --reg-classifier=3.259388007391971
+    python3 finetune.py --dataset=/raid/anon/vgg-aircraft --network=resnet101 --quiet --test --reg-norm=inf-op --reg-method=constraint --reg-extractor=7.6715503305452994 --reg-classifier=21.363896453542512
     python3 finetune.py --dataset=/raid/anon/vgg-aircraft --network=resnet101 --quiet --test --reg-norm=inf-op --reg-method=penalty --reg-extractor=0.003853539013486976 --reg-classifier=0.07476345145522699
     python3 finetune.py --dataset=/raid/anon/vgg-aircraft --network=resnet101 --quiet --test --reg-norm=frob --reg-method=constraint --reg-extractor=2.236423682164394 --reg-classifier=1.8631994367794358
     python3 finetune.py --dataset=/raid/anon/vgg-aircraft --network=resnet101 --quiet --test --reg-norm=frob --reg-method=penalty --reg-extractor=0.014600076196758066 --reg-classifier=0.23391497598093233

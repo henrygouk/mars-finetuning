@@ -6,7 +6,7 @@ for i in 1 2 3 4 5
 do
     python3 finetune.py --dataset=/raid/anon/vgg-pets/ --network=resnet101 --quiet --test
     python3 finetune.py --dataset=/raid/anon/vgg-pets/ --network=resnet101 --quiet --test --reg-method=delta --delta-cache=dc/resnet101-pets.npy --reg-extractor=0.00017987266196887002 --reg-classifier=0.16281288722701628
-    python3 finetune.py --dataset=/raid/anon/vgg-pets/ --network=resnet101 --quiet --test --reg-norm=inf-op --reg-method=constraint --reg-extractor=2.615742426422671 --reg-classifier=9.008723864410545
+    python3 finetune.py --dataset=/raid/anon/vgg-pets/ --network=resnet101 --quiet --test --reg-norm=inf-op --reg-method=constraint --reg-extractor=13.952100641753956 --reg-classifier=17.090633659963352
     python3 finetune.py --dataset=/raid/anon/vgg-pets/ --network=resnet101 --quiet --test --reg-norm=inf-op --reg-method=penalty --reg-extractor=0.00021916093034877063 --reg-classifier=0.0011648743930556243
     python3 finetune.py --dataset=/raid/anon/vgg-pets/ --network=resnet101 --quiet --test --reg-norm=frob --reg-method=constraint --reg-extractor=1.1961134581246993 --reg-classifier=1.7253622107522244
     python3 finetune.py --dataset=/raid/anon/vgg-pets/ --network=resnet101 --quiet --test --reg-norm=frob --reg-method=penalty --reg-extractor=0.03994148696774106 --reg-classifier=0.09534244732508584
