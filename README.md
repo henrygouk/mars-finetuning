@@ -11,17 +11,17 @@ Running an Experiment
 The main file of interest is `finetune.py`. This is a script that will fine-tune and test a model on a supplied dataset. E.g.,
 
 ```
-python3 finetune.py --network=resnet101 --dataset=/path/to/butterfly-200 --reg-method=constraint --reg-norm=inf-op --reg-extractor=5.6 --reg-classifier=9.6 --test
+python3 finetune.py --network=resnet101 --dataset=/path/to/flowers --reg-method=constraint --reg-norm=inf-op --reg-extractor=6.6 --reg-classifier=7.6 --test
 ```
 
-where `/path/to/butterfly-200` is the path to a dataset containing `train/`, `val/` and `test/` subdirectories, each of which contain images stored in the format expected by the keras `ImageDataGenerator.flow_from_directory` method. One can expect this performance when training a ResNet-101 on the Butterfly-200 dataset:
+where `/path/to/flowers` is the path to a dataset containing `train/`, `val/` and `test/` subdirectories, each of which contain images stored in the format expected by the keras `ImageDataGenerator.flow_from_directory` method. A copy of the VGG-Flowers dataset stored in this format can be downloaded from [here](https://www.henrygouk.com/flowers.tar.gz). One can expect this performance when training a ResNet-101 on the VGG-Flowers dataset:
 
 | Method               | Accuracy   |
 | -------------------- | ---------- |
-| Standard Fine-Tuning |     70.02% |
-| L2-SP                |     76.56% |
-| DELTA                |     77.91% |
-| MARS-PGM             | **79.50%** |
+| Standard Fine-Tuning |     76.68% |
+| L2-SP                |     83.11% |
+| DELTA                |     86.57% |
+| MARS-PGM             | **87.42%** |
 
 
 How it Works
