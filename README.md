@@ -1,7 +1,7 @@
 Fine-Tuning with MARS Distance Constraints
 ==========================================
 
-This repo contains the code used for conducting experiments in the paper [Distance-Based Regularisation of Deep Networks for Fine-Tuning](https://arxiv.org/abs/2002.08253).
+This repo contains the code used for conducting experiments in the paper [Distance-Based Regularisation of Deep Networks for Fine-Tuning](https://arxiv.org/abs/2002.08253), published at ICLR 2021.
 
 The code uses the keras API bundled with tensorflow, and has been tested with the official TF 2.1 docker image. The `scripts/` directory contains bash scripts for reproducing the experiments in the paper.
 
@@ -44,10 +44,10 @@ Citation
 If you happen to use this code (or method) in an academic context, please cite the following paper
 
 ```
-@article{gouk2020,
+@inproceedings{gouk2021distance,
   title={Distance-Based Regularisation of Deep Networks for Fine-Tuning},
   author={Gouk, Henry and Hospedales, Timothy M and Pontil, Massimiliano},
-  journal={arXiv preprint arXiv:2002.08253},
-  year={2020}
+  conference={International Conference on Learning Representations},
+  year={2021}
 }
 ```
